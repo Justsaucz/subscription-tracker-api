@@ -1,0 +1,26 @@
+# --- Python Internals ---
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Virtual Environments ---
+.venv/
+
+# --- Database ---
+*.db
+*.sqlite3
+subscriptions.db
+
+# --- Environment Variables ---
+.env
+.env.local
+
+# --- IDE & Editors ---
+.idea/
+.vscode/
+*.swp
+
+# --- Operating System Files ---
+# Mac
+.DS_Store
