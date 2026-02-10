@@ -1,7 +1,9 @@
 from flask import Blueprint, jsonify
+from app import db
 from app.models import Subscription, FrequencyType, StatusType
 
 bp = Blueprint('analytics', __name__, url_prefix='/analytics')
+
 
 @bp.route('/monthly-total', methods=['GET'])
 def monthly_total():
@@ -28,9 +30,12 @@ def monthly_total():
             "monthly_equivalent": round(monthly_price, 2)
         })
 
+    total_year = total_month * 12
+
     return jsonify({
         "total_price_per_month": round(total_month, 2),
-        "total_price_per_year": round(total_month * 12, 2),
+        "total_price_per_year": round(total_year, 2),
         "active_subscriptions": len(subs),
         "breakdown": breakdown
-    })
+    }), 200
+
