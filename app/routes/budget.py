@@ -4,12 +4,8 @@ from app.models import Budget, Subscription, FrequencyType, StatusType
 
 bp = Blueprint('budget', __name__, url_prefix='/budget')
 
-@app.route("/budget/<limit>", methods=["PUT"])
+@app.route("/budget/<int:limit>", methods=["PUT"])
 def set_budget(limit):
-    try:
-        limit = float(limit)
-    except ValueError:
-        return jsonify({"error": "Invalid number"}), 400
 
     if limit <= 0:
         return jsonify({"error": "Budget must be positive"}), 400
