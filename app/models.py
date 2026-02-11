@@ -49,6 +49,5 @@ class Budget(db.Model):
 
     def to_json(self):
         return {
-            "id": self.id,
             "monthly_limit": self.monthly_limit
         }
