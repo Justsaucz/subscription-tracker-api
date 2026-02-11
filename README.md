@@ -143,6 +143,6 @@ python run.py
 
 | Method | Endpoint | Description |
 | --- | --- | --- |
-| **Total** | `/analytics` | List all prices that are Active. |
+| **Total** | `/analytics` | List total prices that are Active. |
 
 
