@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, abort
 from app import db
 from app.models import Subscription, Category, FrequencyType, StatusType
 from sqlalchemy import func
+from app.models import Budget
 
 # Define Blueprint
 bp = Blueprint('subscriptions', __name__, url_prefix='/subscriptions')
@@ -84,7 +85,38 @@ def create_subscription():
                 allowed = [e.value for e in StatusType]
                 abort(400, description=f'Invalid status. Allowed: {allowed}')
 
-        # 5. Handle Category
+         # 5. Budget limit 
+
+        budget = Budget.query.first()
+
+        if budget and status_enum == StatusType.ACTIVE:
+
+            active_subs = Subscription.query.filter_by(
+                status=StatusType.ACTIVE
+            ).all()
+
+            total_month = 0
+
+            for s in active_subs:
+                if s.frequency == FrequencyType.MONTHLY:
+                    total_month += s.price
+                elif s.frequency == FrequencyType.YEARLY:
+                    total_month += s.price / 12
+                elif s.frequency == FrequencyType.WEEKLY:
+                    total_month += s.price * 4
+
+            # add new subscription estimate
+            if freq_enum == FrequencyType.MONTHLY:
+                total_month += price
+            elif freq_enum == FrequencyType.YEARLY:
+                total_month += price / 12
+            elif freq_enum == FrequencyType.WEEKLY:
+                total_month += price * 4
+
+            if total_month > budget.monthly_limit:
+                abort(400, description="Budget limit exceeded!")
+
+        # 6. Handle Category
         cat_obj = get_or_create_category(data['category'])
 
         new_sub = Subscription(
