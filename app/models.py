@@ -42,3 +42,13 @@ class Subscription(db.Model):
             'category': self.category_obj.name if self.category_obj else None,
             'status': self.status.value
         }
+        
+class Budget(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    monthly_limit = db.Column(db.Float, nullable=False)
+
+    def to_json(self):
+        return {
+            "id": self.id,
+            "monthly_limit": self.monthly_limit
+        }
